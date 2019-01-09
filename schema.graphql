@@ -1,0 +1,125 @@
+﻿schema {
+  query: Query
+  mutation: Mutation
+  subscription: Subscription
+}
+
+type Mutation {
+  createProject(input: CreateProjectInput!): project
+  deleteProject(input: DeleteProjectInput!): project
+  updateProject(input: UpdateProjectInput!): project
+}
+
+type Query {
+  getProject(id: ID!): project
+  listProjects(filter: TableProjectFilterInput, limit: Int, nextToken: String): projectConnection
+}
+
+type Subscription {
+  onCreateProject(category: String, description: String, id: ID, name: String, tools: String): project @aws_subscribe(mutations : ["createProject"])
+  onDeleteProject(category: String, description: String, id: ID, name: String, tools: String): project @aws_subscribe(mutations : ["deleteProject"])
+  onUpdateProject(category: String, description: String, id: ID, name: String, tools: String): project @aws_subscribe(mutations : ["updateProject"])
+}
+
+type project {
+  category: String!
+  description: String!
+  id: ID!
+  name: String!
+  repo: AWSURL!
+  tools: String!
+  url: AWSURL!
+}
+
+type projectConnection {
+  items: [project]
+  nextToken: String
+}
+
+input CreateProjectInput {
+  category: String!
+  description: String!
+  name: String!
+  repo: AWSURL!
+  tools: String!
+  url: AWSURL!
+}
+
+input DeleteProjectInput {
+  id: ID!
+}
+
+input TableBooleanFilterInput {
+  eq: Boolean
+  ne: Boolean
+}
+
+input TableFloatFilterInput {
+  between: [Float]
+  contains: Float
+  eq: Float
+  ge: Float
+  gt: Float
+  le: Float
+  lt: Float
+  ne: Float
+  notContains: Float
+}
+
+input TableIDFilterInput {
+  beginsWith: ID
+  between: [ID]
+  contains: ID
+  eq: ID
+  ge: ID
+  gt: ID
+  le: ID
+  lt: ID
+  ne: ID
+  notContains: ID
+}
+
+input TableIntFilterInput {
+  between: [Int]
+  contains: Int
+  eq: Int
+  ge: Int
+  gt: Int
+  le: Int
+  lt: Int
+  ne: Int
+  notContains: Int
+}
+
+input TableProjectFilterInput {
+  category: TableStringFilterInput
+  description: TableStringFilterInput
+  id: TableIDFilterInput
+  name: TableStringFilterInput
+  repo: TableStringFilterInput
+  tools: TableStringFilterInput
+  url: TableStringFilterInput
+}
+
+input TableStringFilterInput {
+  beginsWith: String
+  between: [String]
+  contains: String
+  eq: String
+  ge: String
+  gt: String
+  le: String
+  lt: String
+  ne: String
+  notContains: String
+}
+
+input UpdateProjectInput {
+  category: String
+  description: String
+  id: ID!
+  name: String
+  repo: AWSURL
+  tools: String
+  url: AWSURL
+}
